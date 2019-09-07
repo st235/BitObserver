@@ -22,7 +22,7 @@ class LineChartView @JvmOverloads constructor(
         val GRID_LINES_WIDTH = 1F.toPx()
         val GRID_GAP_LENGTH = 2F.toPx()
         val HIGHLIGHTED_POINT_RADIUS = 8F.toPx()
-        val GRID_TEXT_PADDING = 8F.toPx()
+        val GRID_TEXT_PADDING = 6F.toPx()
         const val GRID_LINES_COUNT = 4
     }
 
@@ -49,7 +49,7 @@ class LineChartView @JvmOverloads constructor(
 
     private val gridTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = ContextCompat.getColor(context, R.color.colorSecondaryText)
+        color = ContextCompat.getColor(context, R.color.colorChartGridText)
         textSize = 12F.spToPx()
     }
 
@@ -70,13 +70,13 @@ class LineChartView @JvmOverloads constructor(
                 val point = lineChartProcessor.findNearestTo(it.first, it.second)
                 if (point != null) {
                     highlightedPoint = PointF(point.first, point.second)
-                    clickObserves.notifyObservers(point.third)
+                    pointSelectionObservers.notifyObservers(point.third)
                     invalidate()
                 }
             }
         }
 
-    private val clickObserves = ObservableModel<Any>()
+    private val pointSelectionObservers = ObservableModel<Any>()
 
     var adapter: LineChartAdapter? = null
     set(value) {
@@ -93,12 +93,12 @@ class LineChartView @JvmOverloads constructor(
         setOnTouchListener(lineChartClickListener)
     }
 
-    fun addOnClickObserver(observer: Observer<Any>) {
-        clickObserves.addObserver(observer)
+    fun addOnPointSelectedObserver(observer: Observer<Any>) {
+        pointSelectionObservers.addObserver(observer)
     }
 
-    fun removeOnClickObserver(observer: Observer<Any>) {
-        clickObserves.removeObserver(observer)
+    fun removedOnPointSelectedObserver(observer: Observer<Any>) {
+        pointSelectionObservers.removeObserver(observer)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

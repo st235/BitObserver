@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/value"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/recycler" />
 
     <TextView
         android:id="@+id/lowest"
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recycler"
         app:layout_constraintEnd_toStartOf="@+id/highest"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         />
@@ -66,9 +66,18 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recycler"
         app:layout_constraintStart_toEndOf="@+id/lowest"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chart"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

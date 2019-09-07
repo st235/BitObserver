@@ -12,4 +12,5 @@
     <color name="colorChartGradientFinish">#00ff4081</color>
     <color name="colorChartHighlightedPoint">#5E5E5E</color>
     <color name="colorChartGridLine">#CECECE</color>
+    <color name="colorChartGridText">@color/colorSecondaryText</color>
 </resources>
