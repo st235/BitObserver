@@ -20,6 +20,7 @@ class ChartPresenter @Inject constructor(
             .compose(schedulers.getComputationToMainTransformer())
             .subscribeTillDetach(onNext = {
                 Timber.d("$it")
+                this.view?.show(it)
             })
     }
 }
