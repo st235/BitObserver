@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#D81B60</color>
+    
+    <color name="colorSecondaryText">#4e4e4e</color>
+    <color name="colorPrimaryText">#2e2e2e</color>
+
+    <color name="colorChartStroke">#ff4081</color>
+    <color name="colorChartGradientStart">#88ff4081</color>
+    <color name="colorChartGradientFinish">#00ff4081</color>
+    <color name="colorChartHighlightedPoint">#5E5E5E</color>
 </resources>

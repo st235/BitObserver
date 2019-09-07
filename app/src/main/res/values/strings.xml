@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">BitObserver</string>
 
-    <string name="btc_to_usd">%1$f $</string>
+    <string name="btc_to_usd">%1$s $</string>
 </resources>

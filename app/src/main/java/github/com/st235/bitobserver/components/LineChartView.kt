@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
+import github.com.st235.bitobserver.R
 import github.com.st235.bitobserver.utils.ObservableModel
 import github.com.st235.bitobserver.utils.Observer
 import github.com.st235.bitobserver.utils.toPx
@@ -21,7 +23,7 @@ class LineChartView @JvmOverloads constructor(
 
     private val basePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        color = 0xFF00B0FF.toInt()
+        color = ContextCompat.getColor(context, R.color.colorChartStroke)
         strokeWidth = LINE_WIDTH
         pathEffect = CornerPathEffect(CORNER_RADIUS)
     }
@@ -38,7 +40,7 @@ class LineChartView @JvmOverloads constructor(
 
     private val highlightedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = Color.WHITE
+        color = ContextCompat.getColor(context, R.color.colorChartHighlightedPoint)
     }
 
     private val chartBounds = RectF()
@@ -91,7 +93,7 @@ class LineChartView @JvmOverloads constructor(
             w.toFloat() - paddingRight - paddingRight,
             h.toFloat() - paddingTop - paddingBottom)
         baseFillPaint.shader = LinearGradient(0F, 0F, 0F, h.toFloat(),
-            0x8800B0FF.toInt(), 0x0000B0FF.toInt(), Shader.TileMode.CLAMP)
+            ContextCompat.getColor(context, R.color.colorChartGradientStart), ContextCompat.getColor(context, R.color.colorChartGradientFinish), Shader.TileMode.CLAMP)
         populatePath()
     }
 
