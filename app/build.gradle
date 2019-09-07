@@ -48,4 +48,5 @@ dependencies {
     implementation libs.stetho
 
     testImplementation libs.junit
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

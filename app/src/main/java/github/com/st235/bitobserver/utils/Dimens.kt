@@ -2,6 +2,7 @@ package github.com.st235.bitobserver.utils
 
 import android.content.res.Resources
 import android.util.TypedValue
+import androidx.annotation.Dimension
 import androidx.annotation.Px
 
 /**
@@ -23,8 +24,22 @@ internal fun Int.toPx(): Int {
  *
  * @return value in pixels
  */
+@Dimension(unit = Dimension.PX)
 internal fun Float.toPx(): Float {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP, this,
+        Resources.getSystem().displayMetrics)
+}
+
+/**
+ * Converts values to its real pixel size
+ * using system scaled density factor
+ *
+ * @return value in pixels
+ */
+@Dimension(unit = Dimension.PX)
+internal fun Float.spToPx(): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP, this,
         Resources.getSystem().displayMetrics)
 }

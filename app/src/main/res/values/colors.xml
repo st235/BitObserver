@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#D81B60</color>
     
-    <color name="colorSecondaryText">#4e4e4e</color>
-    <color name="colorPrimaryText">#2e2e2e</color>
+    <color name="colorSecondaryText">#8E8E8E</color>
+    <color name="colorPrimaryText">#2E2E2E</color>
 
     <color name="colorChartStroke">#ff4081</color>
     <color name="colorChartGradientStart">#88ff4081</color>
     <color name="colorChartGradientFinish">#00ff4081</color>
     <color name="colorChartHighlightedPoint">#5E5E5E</color>
+    <color name="colorChartGridLine">#CECECE</color>
 </resources>

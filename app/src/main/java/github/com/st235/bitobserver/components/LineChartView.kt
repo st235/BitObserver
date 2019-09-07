@@ -2,12 +2,14 @@ package github.com.st235.bitobserver.components
 
 import android.content.Context
 import android.graphics.*
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import github.com.st235.bitobserver.R
 import github.com.st235.bitobserver.utils.ObservableModel
 import github.com.st235.bitobserver.utils.Observer
+import github.com.st235.bitobserver.utils.spToPx
 import github.com.st235.bitobserver.utils.toPx
 
 class LineChartView @JvmOverloads constructor(
@@ -15,8 +17,13 @@ class LineChartView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     companion object {
-        val LINE_WIDTH = 2F.toPx()
-        val CORNER_RADIUS = 4F.toPx()
+        val LINE_WIDTH = 3F.toPx()
+        val CORNER_RADIUS = 6F.toPx()
+        val GRID_LINES_WIDTH = 1F.toPx()
+        val GRID_GAP_LENGTH = 2F.toPx()
+        val HIGHLIGHTED_POINT_RADIUS = 8F.toPx()
+        val GRID_TEXT_PADDING = 8F.toPx()
+        const val GRID_LINES_COUNT = 4
     }
 
     private val drawPath = Path()
@@ -30,12 +37,20 @@ class LineChartView @JvmOverloads constructor(
 
     private val baseFillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
+        pathEffect = CornerPathEffect(CORNER_RADIUS)
     }
 
     private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        color = Color.GRAY
-        strokeWidth = LINE_WIDTH
+        color = ContextCompat.getColor(context, R.color.colorChartGridLine)
+        strokeWidth = GRID_LINES_WIDTH
+        pathEffect = DashPathEffect(floatArrayOf(GRID_GAP_LENGTH, GRID_GAP_LENGTH), 0F)
+    }
+
+    private val gridTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = ContextCompat.getColor(context, R.color.colorSecondaryText)
+        textSize = 12F.spToPx()
     }
 
     private val highlightedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -46,6 +61,7 @@ class LineChartView @JvmOverloads constructor(
     private val chartBounds = RectF()
     private val viewportBounds = RectF()
     private var highlightedPoint: PointF? = null
+    private var sizeResolver: LineChartSizeHelper? = null
 
     private val lineChartProcessor = LineChartPointsProcessor()
     private val lineChartClickListener =
@@ -89,29 +105,60 @@ class LineChartView @JvmOverloads constructor(
         super.onSizeChanged(w, h, oldw, oldh)
         viewportBounds.set(
             paddingLeft.toFloat(),
-            paddingBottom.toFloat(),
-            w.toFloat() - paddingRight - paddingRight,
-            h.toFloat() - paddingTop - paddingBottom)
-        baseFillPaint.shader = LinearGradient(0F, 0F, 0F, h.toFloat(),
-            ContextCompat.getColor(context, R.color.colorChartGradientStart), ContextCompat.getColor(context, R.color.colorChartGradientFinish), Shader.TileMode.CLAMP)
+            paddingTop.toFloat(),
+            w.toFloat() - paddingRight,
+            h.toFloat() - paddingBottom)
+        baseFillPaint.shader =
+            LinearGradient(
+                0F, 0F, 0F, h.toFloat(),
+                ContextCompat.getColor(context, R.color.colorChartGradientStart),
+                ContextCompat.getColor(context, R.color.colorChartGradientFinish),
+                Shader.TileMode.CLAMP
+            )
         populatePath()
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
+        drawGrid(canvas)
+
         canvas?.drawPath(drawPath, baseFillPaint)
         canvas?.drawPath(drawPath, basePaint)
 
-//        val max = 3
-//        for (i in 1 until max) {
-//            val progress = i.toFloat()/max
-//            canvas?.drawLine(0F, height.toFloat() * progress, width.toFloat(), height.toFloat() * progress, gridPaint)
-//        }
-
         val highlightedPoint = highlightedPoint
         if (highlightedPoint != null) {
-            canvas?.drawCircle(highlightedPoint.x, highlightedPoint.y, 8F.toPx(), highlightedPaint)
+            canvas?.drawCircle(
+                highlightedPoint.x,
+                highlightedPoint.y,
+                HIGHLIGHTED_POINT_RADIUS,
+                highlightedPaint
+            )
+        }
+    }
+
+    private fun drawGrid(canvas: Canvas?) {
+        if (adapter == null || adapter?.getSize() ?: 0 < 2) {
+            return
+        }
+
+        val max = GRID_LINES_COUNT
+        for (i in 1 until max) {
+            val progress = i.toFloat() / max
+            val y = height.toFloat() * progress
+
+            canvas?.drawLine(
+                0F, y,
+                width.toFloat(), y,
+                gridPaint
+            )
+
+            canvas?.drawText(
+                sizeResolver.extractY(y),
+                paddingLeft + GRID_TEXT_PADDING,
+                height.toFloat() * progress - GRID_TEXT_PADDING,
+                gridTextPaint
+            )
         }
     }
 
@@ -134,11 +181,13 @@ class LineChartView @JvmOverloads constructor(
         clearState()
 
         chartBounds.set(adapter.calculateBounds())
-        val sizeResolver = LineChartSizeHelper(chartBounds, viewportBounds, LINE_WIDTH)
+        val sizeResolver = LineChartSizeHelper(chartBounds, viewportBounds, LINE_WIDTH, HIGHLIGHTED_POINT_RADIUS)
+        this.sizeResolver = sizeResolver
 
         for (i in 0 until adapter.getSize()) {
             val x = sizeResolver.scaleX(adapter.getX(i))
-            val y = viewportBounds.bottom - sizeResolver.scaleY(adapter.getY(i)) + paddingTop
+            val scaledY = sizeResolver.scaleY(adapter.getY(i))
+            val y = sizeResolver.normalizeY(scaledY, paddingTop.toFloat())
             lineChartProcessor.addPoint(x, y, adapter.getData(i))
 
             if (i == 0) {
@@ -156,5 +205,14 @@ class LineChartView @JvmOverloads constructor(
     private fun clearState() {
         drawPath.reset()
         lineChartProcessor.clear()
+    }
+
+    private fun LineChartSizeHelper?.extractY(normalizedY: Float): String {
+        if (this == null) {
+            return ""
+        }
+
+        val denormalizedY = this.denormalizeY(normalizedY, paddingTop.toFloat())
+        return this.rawY(denormalizedY).toInt().toString()
     }
 }

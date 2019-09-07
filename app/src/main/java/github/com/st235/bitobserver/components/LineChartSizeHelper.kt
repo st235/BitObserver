@@ -7,8 +7,9 @@ import android.graphics.RectF
  */
 class LineChartSizeHelper(
     graphBounds: RectF,
-    viewportBounds: RectF,
-    lineWidth: Float
+    private val viewportBounds: RectF,
+    lineWidth: Float,
+    highlightCircleRadius: Float
 ) {
 
     private val xScale: Float
@@ -20,14 +21,23 @@ class LineChartSizeHelper(
     private val yTranslate: Float
 
     init {
-        xScale = viewportBounds.width() / graphBounds.width()
-        yScale = viewportBounds.height() / graphBounds.height()
+        val width = viewportBounds.width() - lineWidth
+        val height = viewportBounds.height() - lineWidth - highlightCircleRadius
+
+        xScale = width / graphBounds.width()
+        yScale = height / graphBounds.height()
 
         xTranslate = viewportBounds.left - graphBounds.left * xScale + lineWidth / 2
-        yTranslate = viewportBounds.top - graphBounds.top * yScale + lineWidth / 2
+        yTranslate = viewportBounds.top - graphBounds.top * yScale - lineWidth / 2 - highlightCircleRadius / 2
     }
 
     fun scaleX(rawX: Float): Float = rawX * xScale + xTranslate
 
     fun scaleY(rawY: Float): Float = rawY * yScale + yTranslate
+
+    fun normalizeY(scaledY: Float, paddingTop: Float): Float = viewportBounds.bottom - scaledY + paddingTop
+
+    fun denormalizeY(normalizedY: Float, paddingTop: Float): Float = viewportBounds.bottom - normalizedY + paddingTop
+
+    fun rawY(scaledY: Float): Float = (scaledY - yTranslate) / yScale
 }
