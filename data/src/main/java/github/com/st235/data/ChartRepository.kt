@@ -15,7 +15,7 @@ class ChartRepository internal constructor(
 
     fun fetchCharts() =
         chartApi.fetchChart(
-            type = "transactions-per-second",
+            type = "market-price",
             timeSpan = "5weeks",
             rollingAverage = "8hours",
             format = "json",

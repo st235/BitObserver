@@ -1,21 +1,17 @@
 package github.com.st235.bitobserver.components
 
 import android.graphics.RectF
+import github.com.st235.bitobserver.utils.ObservableModel
 import kotlin.math.max
 import kotlin.math.min
-
-typealias LineDataObserver = () -> Unit
-typealias ObserversList = MutableList<LineDataObserver>
 
 /**
  * Line chart data adapter.
  * Helps load data into the chart view.
  */
-abstract class LineChartAdapter {
+abstract class LineChartAdapter: ObservableModel<Unit>() {
 
-    private val observersList: ObserversList = mutableListOf()
-
-    abstract val count: Int
+    abstract fun getSize(): Int
 
     open fun getX(index: Int): Float = index.toFloat()
 
@@ -23,21 +19,13 @@ abstract class LineChartAdapter {
 
     abstract fun getData(index: Int): Any
 
-    fun addLineDataObserver(observer: LineDataObserver) {
-        observersList.add(observer)
-    }
-
-    fun removeLineDataObserver(observer: LineDataObserver) {
-        observersList.remove(observer)
-    }
-
     fun calculateBounds(): RectF {
         var minX = Float.MAX_VALUE
         var maxX = Float.MIN_VALUE
         var minY = Float.MAX_VALUE
         var maxY = Float.MIN_VALUE
 
-        for (i in 0 until count) {
+        for (i in 0 until getSize()) {
             val x = getX(i)
             val y = getY(i)
 

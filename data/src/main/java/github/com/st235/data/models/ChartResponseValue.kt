@@ -6,5 +6,5 @@ import java.math.BigDecimal
 
 data class ChartResponseValue(
     @SerializedName("x") @Expose val time: Long,
-    @SerializedName("y") @Expose val value: BigDecimal
+    @SerializedName("y") @Expose val value: Float
 )
