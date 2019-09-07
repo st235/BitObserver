@@ -13,4 +13,8 @@
     <color name="colorChartHighlightedPoint">#5E5E5E</color>
     <color name="colorChartGridLine">#CECECE</color>
     <color name="colorChartGridText">@color/colorSecondaryText</color>
+
+    <color name="colorTimeIntervalTextSelected">#FFF</color>
+    <color name="colorTimeIntervalTextUnselected">@color/colorPrimaryText</color>
+    <color name="colorTimeIntervalBackground">@color/colorPrimaryText</color>
 </resources>

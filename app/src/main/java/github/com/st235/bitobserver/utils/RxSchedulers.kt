@@ -1,9 +1,6 @@
 package github.com.st235.bitobserver.utils
 
-import io.reactivex.SingleTransformer
-import io.reactivex.ObservableTransformer
-import io.reactivex.FlowableTransformer
-import io.reactivex.Scheduler
+import io.reactivex.*
 
 
 abstract class RxSchedulers {
@@ -30,6 +27,14 @@ abstract class RxSchedulers {
 
     fun <T> getIoToMainTransformerFlowable(): FlowableTransformer<T, T> {
         return FlowableTransformer{ objectObservable ->
+            objectObservable
+                .subscribeOn(ioScheduler)
+                .observeOn(mainThreadScheduler)
+        }
+    }
+
+    fun getIoToMainTransformerCompletable(): CompletableTransformer {
+        return CompletableTransformer{ objectObservable ->
             objectObservable
                 .subscribeOn(ioScheduler)
                 .observeOn(mainThreadScheduler)

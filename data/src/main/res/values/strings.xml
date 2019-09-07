@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">data</string>
+
+    <string name="seven_days">7D</string>
+    <string name="five_weeks">5W</string>
+    <string name="one_month">1M</string>
+    <string name="all">ALL</string>
 </resources>

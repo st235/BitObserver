@@ -13,4 +13,8 @@
     <color name="colorChartHighlightedPoint">#FFFFFF</color>
     <color name="colorChartGridLine">#FFFFFF</color>
     <color name="colorChartGridText">@color/colorPrimaryText</color>
+
+    <color name="colorTimeIntervalTextSelected">@android:color/black</color>
+    <color name="colorTimeIntervalTextUnselected">@android:color/white</color>
+    <color name="colorTimeIntervalBackground">@android:color/white</color>
 </resources>

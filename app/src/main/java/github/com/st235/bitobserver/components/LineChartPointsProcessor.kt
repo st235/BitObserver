@@ -1,5 +1,7 @@
 package github.com.st235.bitobserver.components
 
+import kotlin.math.abs
+
 class LineChartPointsProcessor {
 
     /**
@@ -16,6 +18,10 @@ class LineChartPointsProcessor {
         extras.add(extra)
     }
 
+    /**
+     * Modified binary search mechanism
+     * Looking for a nearest
+     */
     fun findNearestTo(x: Float, y: Float): Triple<Float, Float, Any>? {
         if (xCoords.size == 0) {
             return null
@@ -26,7 +32,20 @@ class LineChartPointsProcessor {
 
         while (left <= right) {
             if (left == right) {
-                return Triple(xCoords[left], yCoords[left], extras[left])
+                val currentDistance = x.distanceToNearestIfPossible(left)
+                val leftDistance = x.distanceToNearestIfPossible(left - 1)
+                val rightDistance = x.distanceToNearestIfPossible(left + 1)
+
+                if (currentDistance < leftDistance &&
+                        currentDistance < rightDistance) {
+                    return Triple(xCoords[left], yCoords[left], extras[left])
+                }
+
+                if (leftDistance < rightDistance) {
+                    return Triple(xCoords[left - 1], yCoords[left - 1], extras[left - 1])
+                }
+
+                return Triple(xCoords[left + 1], yCoords[left + 1], extras[left + 1])
             }
 
             val middle = left + (right - left) / 2
@@ -43,6 +62,13 @@ class LineChartPointsProcessor {
         }
 
         return null
+    }
+
+    private fun Float.distanceToNearestIfPossible(index: Int): Float {
+        if (index >= 0 && index < xCoords.size) {
+            return abs(this - xCoords[index])
+        }
+        return Float.MAX_VALUE
     }
 
     fun clear() {

@@ -22,7 +22,7 @@ class LineChartView @JvmOverloads constructor(
         val GRID_LINES_WIDTH = 1F.toPx()
         val GRID_GAP_LENGTH = 2F.toPx()
         val HIGHLIGHTED_POINT_RADIUS = 8F.toPx()
-        val GRID_TEXT_PADDING = 6F.toPx()
+        val GRID_TEXT_PADDING = 8F.toPx()
         const val GRID_LINES_COUNT = 4
     }
 
@@ -203,6 +203,8 @@ class LineChartView @JvmOverloads constructor(
     }
 
     private fun clearState() {
+        highlightedPoint = null
+        sizeResolver = null
         drawPath.reset()
         lineChartProcessor.clear()
     }
