@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+android {
+    compileSdkVersion config.compileSdk
+    buildToolsVersion config.buildTools
+
+    defaultConfig {
+        applicationId "github.com.st235.bitobserver"
+        minSdkVersion config.minSdk
+        targetSdkVersion config.targetSdk
+        versionCode config.versionCode
+        versionName config.versionName
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            versionNameSuffix '-debug'
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':data')
+
+    implementation libs.kotlin
+    implementation libs.appCompat
+    implementation libs.coreKtx
+    implementation libs.constraint
+
+    implementation libs.dagger
+    kapt proccessors.dagger
+
+    implementation libs.rxJava
+    implementation libs.rxAndroid
+
+    implementation libs.timber
+    implementation libs.stetho
+
+    testImplementation libs.junit
+}

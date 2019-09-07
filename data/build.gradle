@@ -1,0 +1,50 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion config.compileSdk
+    buildToolsVersion config.buildTools
+
+
+    defaultConfig {
+        minSdkVersion config.minSdk
+        targetSdkVersion config.targetSdk
+        versionCode config.versionCode
+        versionName config.versionName
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField 'String', 'BASE_API_URL', '\"https://api.blockchain.info\"'
+
+            minifyEnabled false
+            versionNameSuffix '-debug'
+        }
+
+        release {
+            buildConfigField 'String', 'BASE_API_URL', '\"https://api.blockchain.info\"'
+
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation libs.kotlin
+    implementation libs.appCompat
+    implementation libs.coreKtx
+    implementation libs.constraint
+
+    implementation libs.rxJava
+
+    implementation libs.retrofit
+    implementation libs.gson
+    implementation libs.retrofitRx
+
+    testImplementation libs.junit
+}
