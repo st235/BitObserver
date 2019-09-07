@@ -19,11 +19,15 @@ class LineChartView @JvmOverloads constructor(
 
     private val drawPath = Path()
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val basePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        color = Color.WHITE
+        color = 0xFF00B0FF.toInt()
         strokeWidth = LINE_WIDTH
         pathEffect = CornerPathEffect(CORNER_RADIUS)
+    }
+
+    private val baseFillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
     }
 
     private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -34,7 +38,7 @@ class LineChartView @JvmOverloads constructor(
 
     private val highlightedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = Color.CYAN
+        color = Color.WHITE
     }
 
     private val chartBounds = RectF()
@@ -82,17 +86,20 @@ class LineChartView @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         viewportBounds.set(
-            leftPaddingOffset.toFloat(),
-            topPaddingOffset.toFloat(),
-            leftPaddingOffset + w.toFloat(),
-            topPaddingOffset + h.toFloat())
+            paddingLeft.toFloat(),
+            paddingBottom.toFloat(),
+            w.toFloat() - paddingRight - paddingRight,
+            h.toFloat() - paddingTop - paddingBottom)
+        baseFillPaint.shader = LinearGradient(0F, 0F, 0F, h.toFloat(),
+            0x8800B0FF.toInt(), 0x0000B0FF.toInt(), Shader.TileMode.CLAMP)
         populatePath()
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        canvas?.drawPath(drawPath, paint)
+        canvas?.drawPath(drawPath, baseFillPaint)
+        canvas?.drawPath(drawPath, basePaint)
 
 //        val max = 3
 //        for (i in 1 until max) {
@@ -129,7 +136,7 @@ class LineChartView @JvmOverloads constructor(
 
         for (i in 0 until adapter.getSize()) {
             val x = sizeResolver.scaleX(adapter.getX(i))
-            val y = viewportBounds.bottom - sizeResolver.scaleY(adapter.getY(i))
+            val y = viewportBounds.bottom - sizeResolver.scaleY(adapter.getY(i)) + paddingTop
             lineChartProcessor.addPoint(x, y, adapter.getData(i))
 
             if (i == 0) {
@@ -138,6 +145,10 @@ class LineChartView @JvmOverloads constructor(
                 drawPath.lineTo(x, y)
             }
         }
+
+        drawPath.lineTo(width.toFloat() + LINE_WIDTH / 2, height.toFloat() + LINE_WIDTH / 2)
+        drawPath.lineTo( LINE_WIDTH / 2, height.toFloat() + LINE_WIDTH / 2)
+        drawPath.lineTo(adapter.getX(0), adapter.getY(0))
     }
 
     private fun clearState() {
