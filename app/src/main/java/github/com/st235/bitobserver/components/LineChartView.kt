@@ -34,6 +34,7 @@ class LineChartView @JvmOverloads constructor(
 
     private val strokePath = Path()
     private val fillPath = Path()
+    private val gridPath = Path()
 
     private val basePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -150,10 +151,8 @@ class LineChartView @JvmOverloads constructor(
         }
 
         calculateGrid(chartBounds) { positionY, viewportY ->
-            val path = Path()
-            path.moveTo(0F, viewportY)
-            path.lineTo(width.toFloat(), viewportY)
-            canvas?.drawPath(path, gridPaint)
+            gridPath.moveTo(0F, viewportY)
+            gridPath.lineTo(width.toFloat(), viewportY)
 
             canvas?.drawText(
                 positionY.toString(),
@@ -162,6 +161,8 @@ class LineChartView @JvmOverloads constructor(
                 gridTextPaint
             )
         }
+
+        canvas?.drawPath(gridPath, gridPaint)
     }
 
     private fun onNewData() {
@@ -215,6 +216,7 @@ class LineChartView @JvmOverloads constructor(
     private fun clearState() {
         highlightedPoint = null
         sizeResolver = null
+        gridPath.reset()
         fillPath.reset()
         strokePath.reset()
         lineChartProcessor.clear()
