@@ -17,4 +17,6 @@
     <color name="colorTimeIntervalTextSelected">@android:color/black</color>
     <color name="colorTimeIntervalTextUnselected">@android:color/white</color>
     <color name="colorTimeIntervalBackground">@android:color/white</color>
+
+    <color name="colorLoaderBackground">#88000000</color>
 </resources>

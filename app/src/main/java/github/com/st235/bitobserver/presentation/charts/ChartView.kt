@@ -9,4 +9,7 @@ interface ChartView: BaseView {
     fun setSelectedValue(valueText: CharSequence)
     fun showChart(model: ChartModel)
     fun setAvailableTimeIntervals(intervals: List<TimeInterval>)
+
+    fun showLoader()
+    fun hideLoader()
 }

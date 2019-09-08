@@ -17,4 +17,6 @@
     <color name="colorTimeIntervalTextSelected">#FFF</color>
     <color name="colorTimeIntervalTextUnselected">@color/colorPrimaryText</color>
     <color name="colorTimeIntervalBackground">@color/colorPrimaryText</color>
+
+    <color name="colorLoaderBackground">#88FFFFFF</color>
 </resources>

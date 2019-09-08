@@ -1,6 +1,7 @@
 package github.com.st235.bitobserver.presentation.charts
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.com.st235.bitobserver.BitObserverApp
@@ -10,6 +11,7 @@ import github.com.st235.data.models.ChartModel
 import github.com.st235.data.models.ChartPoint
 import github.com.st235.data.models.TimeInterval
 import kotlinx.android.synthetic.main.activity_chart.*
+import kotlinx.android.synthetic.main.content_loading.*
 import javax.inject.Inject
 
 class ChartActivity : AppCompatActivity(), ChartView {
@@ -51,6 +53,14 @@ class ChartActivity : AppCompatActivity(), ChartView {
             itemAnimator = null
             hasFixedSize()
         }
+    }
+
+    override fun showLoader() {
+        loader.visibility = View.VISIBLE
+    }
+
+    override fun hideLoader() {
+        loader.visibility = View.GONE
     }
 
     override fun setSelectedDate(dateText: CharSequence) {

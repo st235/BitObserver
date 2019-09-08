@@ -24,7 +24,7 @@ class ChartPresenter @Inject constructor(
         chartRepository.fetchCharts()
             .compose(schedulers.getComputationToMainTransformer())
             .subscribeTillDetach(onNext = {
-                Timber.d("$it")
+                this.view?.hideLoader()
                 this.view?.showChart(it)
             })
 
@@ -41,6 +41,8 @@ class ChartPresenter @Inject constructor(
     }
 
     fun onNewTimeInterval(interval: TimeInterval) {
+        this.view?.showLoader()
+
         chartRepository.changeTimeInterval(interval)
             .compose(schedulers.getIoToMainTransformerCompletable())
             .subscribe()
