@@ -1,5 +1,6 @@
 package github.com.st235.bitobserver.presentation.charts
 
+import github.com.st235.bitobserver.debug.ThreadUtils
 import github.com.st235.bitobserver.presentation.base.BasePresenter
 import github.com.st235.bitobserver.utils.RxSchedulers
 import github.com.st235.bitobserver.utils.clipAndFormat
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class ChartPresenter @Inject constructor(
     private val chartRepository: ChartRepository,
+    private val threadAssertionUtils: ThreadUtils,
     private val schedulers: RxSchedulers
 ): BasePresenter<ChartView>() {
 
@@ -24,6 +26,7 @@ class ChartPresenter @Inject constructor(
         chartRepository.fetchCharts()
             .compose(schedulers.getComputationToMainTransformer())
             .subscribeTillDetach(onNext = {
+                threadAssertionUtils.assertOnMainThread()
                 this.view?.hideLoader()
                 this.view?.showChart(it)
             })
@@ -31,6 +34,7 @@ class ChartPresenter @Inject constructor(
         chartRepository.getAllAvailableTimeIntervals()
             .compose(schedulers.getComputationToMainTransformerSingle())
             .subscribeTillDetach(onNext = {
+                threadAssertionUtils.assertOnMainThread()
                 this.view?.setAvailableTimeIntervals(it)
             })
     }

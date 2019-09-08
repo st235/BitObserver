@@ -76,7 +76,7 @@ class LineChartView @JvmOverloads constructor(
 
     private val lineChartProcessor = LineChartPointsProcessor()
     private val lineChartClickListener =
-        LineChartClickListener().apply {
+        LineChartPointSelectedListener().apply {
             addObserver {
                 val point = lineChartProcessor.findNearestTo(it.first, it.second)
                 if (point != null) {

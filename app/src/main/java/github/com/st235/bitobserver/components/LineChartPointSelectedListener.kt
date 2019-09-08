@@ -5,7 +5,7 @@ import android.view.View
 import github.com.st235.bitobserver.utils.ObservableModel
 
 
-class LineChartClickListener: ObservableModel<Pair<Float, Float>>(), View.OnTouchListener {
+class LineChartPointSelectedListener: ObservableModel<Pair<Float, Float>>(), View.OnTouchListener {
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         when (event.action) {

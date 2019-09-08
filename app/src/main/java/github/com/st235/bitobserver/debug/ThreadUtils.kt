@@ -12,7 +12,7 @@ import timber.log.Timber
  * long operation prevention on main and background thread
  * Not fires in production code, but still fires in debug
  */
-object ThreadUtils {
+class ThreadUtils {
     /**
      * Checks that operation should be performed on main thread
      *

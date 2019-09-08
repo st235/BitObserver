@@ -2,7 +2,6 @@ package github.com.st235.bitobserver.utils
 
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.text.format.DateFormat
 import android.text.style.RelativeSizeSpan
 import java.text.DecimalFormatSymbols
@@ -34,23 +33,40 @@ fun Float.findNearest(round: Int): Float {
     return (if (this - a > b - this) b else a).toFloat()
 }
 
-fun Float.clipAndFormat(): Spannable {
-    val builder = SpannableStringBuilder()
+fun Float.clip(
+    decimalSeparator: Char,
+    postfix: String
+): String {
+    val factor = 100
+    val builder = StringBuilder()
 
     val iv = this.toInt()
-    val lv = String.format(CLIPPING_MASK, (this * 100).toInt() % 100)
+    val lv = String.format(CLIPPING_MASK, (this * factor).toInt() % factor)
 
     builder
         .append(iv.toString())
-        .append(getCurrencySeparator())
+        .append(decimalSeparator)
         .append(lv)
-        .append(" $")
+        .append(postfix)
 
-    builder.setSpan(
+    return builder.toString()
+}
+
+fun Float.clipAndFormat(
+    decimalSeparator: Char = getCurrencySeparator(),
+    postfix: String = " $"
+    ): Spannable {
+    val decimalsToTrim = 2
+
+    val spannable = SpannableString(
+        clip(decimalSeparator = decimalSeparator, postfix = postfix)
+    )
+
+    spannable.setSpan(
         RelativeSizeSpan(0.7F),
-        builder.length - lv.length - 3, builder.length,
+        spannable.length - decimalsToTrim - postfix.length - 1, spannable.length,
         SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
     )
 
-    return builder
+    return spannable
 }

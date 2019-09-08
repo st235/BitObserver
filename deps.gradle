@@ -22,7 +22,9 @@ ext.versions = [
 
         timber         : '4.7.1',
 
-        junit          : '4.12'
+        junit          : '4.12',
+        mockito        : '3.0.0',
+        kotlinMockito  : '2.1.0',
 ]
 
 ext.libs = [
@@ -43,6 +45,9 @@ ext.libs = [
         timber          : "com.jakewharton.timber:timber:$versions.timber",
 
         junit           : "junit:junit:$versions.junit",
+        mockito         : "org.mockito:mockito-core:$versions.mockito",
+        kotlinMockito   : "com.nhaarman.mockitokotlin2:mockito-kotlin:$versions.kotlinMockito",
+
 ]
 
 ext.proccessors = [

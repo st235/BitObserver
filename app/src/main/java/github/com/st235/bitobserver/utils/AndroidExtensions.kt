@@ -1,10 +1,11 @@
 package github.com.st235.bitobserver.utils
 
 import android.app.Activity
-import android.R.attr.orientation
 import android.content.res.Configuration
 
-
+/**
+ * Provides different resources for a different orientation
+ */
 fun <T> Activity.alternateForOrientation(
     portraitResource: T,
     landscapeResource: T
