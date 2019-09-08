@@ -26,7 +26,8 @@ class LineChartView @JvmOverloads constructor(
         const val GRID_LINES_COUNT = 4
     }
 
-    private val drawPath = Path()
+    private val strokePath = Path()
+    private val fillPath = Path()
 
     private val basePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -123,8 +124,8 @@ class LineChartView @JvmOverloads constructor(
 
         drawGrid(canvas)
 
-        canvas?.drawPath(drawPath, baseFillPaint)
-        canvas?.drawPath(drawPath, basePaint)
+        canvas?.drawPath(fillPath, baseFillPaint)
+        canvas?.drawPath(strokePath, basePaint)
 
         val highlightedPoint = highlightedPoint
         if (highlightedPoint != null) {
@@ -190,22 +191,31 @@ class LineChartView @JvmOverloads constructor(
             val y = sizeResolver.normalizeY(scaledY, paddingTop.toFloat())
             lineChartProcessor.addPoint(x, y, adapter.getData(i))
 
-            if (i == 0) {
-                drawPath.moveTo(x, y)
-            } else {
-                drawPath.lineTo(x, y)
+            when (i) {
+                0 -> strokePath.moveTo(x, y)
+                else -> strokePath.lineTo(x, y)
             }
+
         }
 
-        drawPath.lineTo(width.toFloat() + LINE_WIDTH / 2, height.toFloat() + LINE_WIDTH / 2)
-        drawPath.lineTo( LINE_WIDTH / 2, height.toFloat() + LINE_WIDTH / 2)
-        drawPath.lineTo(adapter.getX(0), adapter.getY(0))
+        val firstPoint = lineChartProcessor.first()
+        val lastPoint = lineChartProcessor.last()
+
+        highlightedPoint = PointF(lastPoint.first, lastPoint.second)
+        pointSelectionObservers.notifyObservers(lastPoint.third)
+
+        fillPath.addPath(strokePath)
+
+        fillPath.lineTo(lastPoint.first, height.toFloat())
+        fillPath.lineTo( firstPoint.first, height.toFloat())
+        fillPath.lineTo(firstPoint.first, firstPoint.second)
     }
 
     private fun clearState() {
         highlightedPoint = null
         sizeResolver = null
-        drawPath.reset()
+        fillPath.reset()
+        strokePath.reset()
         lineChartProcessor.clear()
     }
 
@@ -216,5 +226,13 @@ class LineChartView @JvmOverloads constructor(
 
         val denormalizedY = this.denormalizeY(normalizedY, paddingTop.toFloat())
         return this.rawY(denormalizedY).toInt().toString()
+    }
+
+    private fun LineChartPointsProcessor.first(): Triple<Float, Float, Any> {
+        return get(0)
+    }
+
+    private fun LineChartPointsProcessor.last(): Triple<Float, Float, Any> {
+        return get((adapter?.getSize() ?: 1) - 1)
     }
 }

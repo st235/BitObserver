@@ -2,14 +2,14 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#FF4081</color>
     
     <color name="colorSecondaryText">#8E8E8E</color>
     <color name="colorPrimaryText">#2E2E2E</color>
 
-    <color name="colorChartStroke">#ff4081</color>
-    <color name="colorChartGradientStart">#88ff4081</color>
-    <color name="colorChartGradientFinish">#00ff4081</color>
+    <color name="colorChartStroke">#FF4081</color>
+    <color name="colorChartGradientStart">#88FF4081</color>
+    <color name="colorChartGradientFinish">#00FF4081</color>
     <color name="colorChartHighlightedPoint">#5E5E5E</color>
     <color name="colorChartGridLine">#CECECE</color>
     <color name="colorChartGridText">@color/colorSecondaryText</color>

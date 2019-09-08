@@ -48,6 +48,7 @@ class ChartActivity : AppCompatActivity(), ChartView {
         with(recycler) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = chartIntervalAdapter
+            itemAnimator = null
             hasFixedSize()
         }
     }

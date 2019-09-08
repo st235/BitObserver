@@ -37,6 +37,7 @@ dependencies {
     implementation libs.appCompat
     implementation libs.coreKtx
     implementation libs.constraint
+    implementation libs.recycler
 
     implementation libs.dagger
     kapt proccessors.dagger
@@ -45,8 +46,6 @@ dependencies {
     implementation libs.rxAndroid
 
     implementation libs.timber
-    implementation libs.stetho
 
     testImplementation libs.junit
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

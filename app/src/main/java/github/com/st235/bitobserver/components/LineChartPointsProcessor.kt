@@ -18,9 +18,13 @@ class LineChartPointsProcessor {
         extras.add(extra)
     }
 
+    fun get(index: Int): Triple<Float, Float, Any> = Triple(xCoords[index], yCoords[index], extras[index])
+
     /**
      * Modified binary search mechanism
      * Looking for a nearest
+     *
+     * Complexity: O(log n)
      */
     fun findNearestTo(x: Float, y: Float): Triple<Float, Float, Any>? {
         if (xCoords.size == 0) {
@@ -64,6 +68,9 @@ class LineChartPointsProcessor {
         return null
     }
 
+    /**
+     * Calculates Cartesian distance between two coordinates
+     */
     private fun Float.distanceToNearestIfPossible(index: Int): Float {
         if (index >= 0 && index < xCoords.size) {
             return abs(this - xCoords[index])

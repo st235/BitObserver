@@ -4,5 +4,8 @@
     <string name="seven_days">7D</string>
     <string name="five_weeks">5W</string>
     <string name="one_month">1M</string>
+    <string name="three_month">3M</string>
+    <string name="five_month">5M</string>
+    <string name="one_year">1Y</string>
     <string name="all">ALL</string>
 </resources>
