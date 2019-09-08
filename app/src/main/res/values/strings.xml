@@ -1,5 +1,3 @@
 <resources>
-    <string name="app_name">BitObserver</string>
-
-    <string name="btc_to_usd">%1$s $</string>
+    <string name="app_name">Bit Rate</string>
 </resources>
