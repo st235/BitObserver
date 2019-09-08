@@ -36,8 +36,4 @@ class LineChartSizeHelper(
     fun scaleY(rawY: Float): Float = rawY * yScale + yTranslate
 
     fun normalizeY(scaledY: Float, paddingTop: Float): Float = viewportBounds.bottom - scaledY + paddingTop
-
-    fun denormalizeY(normalizedY: Float, paddingTop: Float): Float = viewportBounds.bottom - normalizedY + paddingTop
-
-    fun rawY(scaledY: Float): Float = (scaledY - yTranslate) / yScale
 }

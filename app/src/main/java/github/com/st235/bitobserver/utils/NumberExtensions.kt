@@ -16,10 +16,22 @@ const val CLIPPING_MASK = "%1$02d"
  */
 fun getCurrencySeparator() = DecimalFormatSymbols.getInstance().decimalSeparator
 
-fun Long.dateFromTimeStamp(): String {
-    val calendar = Calendar.getInstance(Locale.getDefault())
+fun Long.dateFromTimeStamp(locale: Locale = Locale.getDefault()): String {
+    val calendar = Calendar.getInstance(locale)
     calendar.timeInMillis = this * 1000
     return DateFormat.format(DATE_FORMAT, calendar).toString()
+}
+
+fun Float.findNearest(round: Int): Float {
+    if (this <= 0) {
+        return 0F
+    }
+
+    val value = this.toInt()
+
+    val a = value / round * round
+    val b = a + round
+    return (if (this - a > b - this) b else a).toFloat()
 }
 
 fun Float.clipAndFormat(): Spannable {

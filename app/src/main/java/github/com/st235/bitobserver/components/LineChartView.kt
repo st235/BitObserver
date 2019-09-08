@@ -7,8 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import github.com.st235.bitobserver.R
-import github.com.st235.bitobserver.utils.ObservableModel
-import github.com.st235.bitobserver.utils.Observer
+import github.com.st235.bitobserver.utils.*
 import github.com.st235.bitobserver.utils.spToPx
 import github.com.st235.bitobserver.utils.toPx
 
@@ -23,7 +22,14 @@ class LineChartView @JvmOverloads constructor(
         val GRID_GAP_LENGTH = 2F.toPx()
         val HIGHLIGHTED_POINT_RADIUS = 8F.toPx()
         val GRID_TEXT_PADDING = 8F.toPx()
-        const val GRID_LINES_COUNT = 4
+
+        const val MIN_GRID_LINES = 3
+        const val MAX_GRID_LINES = 5
+
+        /**
+         * Should be sorted in a reverse order
+         */
+        val POSSIBLE_GRID_STEPS = intArrayOf(10000, 5000, 2000, 1000, 500, 300, 200, 100, 10)
     }
 
     private val strokePath = Path()
@@ -143,21 +149,16 @@ class LineChartView @JvmOverloads constructor(
             return
         }
 
-        val max = GRID_LINES_COUNT
-        for (i in 1 until max) {
-            val progress = i.toFloat() / max
-            val y = height.toFloat() * progress
-
-            canvas?.drawLine(
-                0F, y,
-                width.toFloat(), y,
-                gridPaint
-            )
+        calculateGrid(chartBounds) { positionY, viewportY ->
+            val path = Path()
+            path.moveTo(0F, viewportY)
+            path.lineTo(width.toFloat(), viewportY)
+            canvas?.drawPath(path, gridPaint)
 
             canvas?.drawText(
-                sizeResolver.extractY(y),
+                positionY.toString(),
                 paddingLeft + GRID_TEXT_PADDING,
-                height.toFloat() * progress - GRID_TEXT_PADDING,
+                viewportY - GRID_TEXT_PADDING,
                 gridTextPaint
             )
         }
@@ -219,20 +220,41 @@ class LineChartView @JvmOverloads constructor(
         lineChartProcessor.clear()
     }
 
-    private fun LineChartSizeHelper?.extractY(normalizedY: Float): String {
-        if (this == null) {
-            return ""
+    private inline fun calculateGrid(
+        chartBounds: RectF,
+        onLineReady: (positionY: Int, viewportY: Float) -> Unit
+    ) {
+        val sizeResolver = sizeResolver ?: return
+        val amplitude = chartBounds.height()
+
+        var currentStep = 0
+
+        for (step in POSSIBLE_GRID_STEPS) {
+            if (amplitude / step > MIN_GRID_LINES &&
+                amplitude / step <= MAX_GRID_LINES
+            ) {
+                currentStep = step
+            }
         }
 
-        val denormalizedY = this.denormalizeY(normalizedY, paddingTop.toFloat())
-        return this.rawY(denormalizedY).toInt().toString()
+        if (currentStep == 0) {
+            return
+        }
+
+        var currentY = chartBounds.top.findNearest(currentStep)
+
+        while (currentY <= chartBounds.bottom) {
+            val scaledY = sizeResolver.scaleY(currentY)
+            val viewportY = sizeResolver.normalizeY(scaledY, paddingTop.toFloat())
+
+            onLineReady(currentY.toInt(), viewportY)
+
+            currentY += currentStep
+        }
     }
 
-    private fun LineChartPointsProcessor.first(): Triple<Float, Float, Any> {
-        return get(0)
-    }
+    private fun LineChartPointsProcessor.first(): Triple<Float, Float, Any> = get(0)
 
-    private fun LineChartPointsProcessor.last(): Triple<Float, Float, Any> {
-        return get((adapter?.getSize() ?: 1) - 1)
-    }
+    private fun LineChartPointsProcessor.last(): Triple<Float, Float, Any> =
+        get((adapter?.getSize() ?: 1) - 1)
 }

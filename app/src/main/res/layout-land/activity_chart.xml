@@ -18,13 +18,13 @@
         app:fontFamily="sans-serif-condensed"
         app:layout_constraintBottom_toTopOf="@+id/value"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/recyclerBarrier"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="27 Jan, 2018" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/value"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
@@ -33,7 +33,7 @@
         app:fontFamily="sans-serif-medium"
         app:layout_constraintBottom_toTopOf="@+id/chart"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/recyclerBarrier"
         app:layout_constraintTop_toBottomOf="@+id/date"
         tools:text="100500,10 USD" />
 
@@ -41,14 +41,14 @@
         android:id="@+id/chart"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:paddingLeft="8dp"
         android:paddingTop="16dp"
         android:paddingRight="8dp"
-        android:paddingBottom="76dp"
-        app:layout_constraintBottom_toTopOf="@+id/recycler"
+        android:paddingBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/recyclerBarrier"
         app:layout_constraintTop_toBottomOf="@+id/value" />
 
     <TextView
@@ -56,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/recycler"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/highest"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent" />
@@ -66,21 +66,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/recycler"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/chart"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@+id/lowest" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/recyclerBarrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="recycler"
+        tools:layout_editor_absoluteX="731dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include layout="@layout/content_loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>

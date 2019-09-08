@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import github.com.st235.bitobserver.BitObserverApp
 import github.com.st235.bitobserver.R
 import github.com.st235.bitobserver.utils.Observer
+import github.com.st235.bitobserver.utils.alternateForOrientation
 import github.com.st235.data.models.ChartModel
 import github.com.st235.data.models.ChartPoint
 import github.com.st235.data.models.TimeInterval
@@ -48,7 +49,10 @@ class ChartActivity : AppCompatActivity(), ChartView {
         chartIntervalAdapter.itemClickListener = onTimeIntervalChangedListener
 
         with(recycler) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = alternateForOrientation(
+                portraitResource = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false),
+                landscapeResource = LinearLayoutManager(context)
+            )
             adapter = chartIntervalAdapter
             itemAnimator = null
             hasFixedSize()
