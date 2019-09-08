@@ -36,6 +36,8 @@ class LineChartView @JvmOverloads constructor(
     private val fillPath = Path()
     private val gridPath = Path()
 
+    private val gridLineCoordinates = mutableListOf<Pair<String, Float>>()
+
     private val basePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.colorChartStroke)
@@ -68,6 +70,7 @@ class LineChartView @JvmOverloads constructor(
 
     private val chartBounds = RectF()
     private val viewportBounds = RectF()
+
     private var highlightedPoint: PointF? = null
     private var sizeResolver: LineChartSizeHelper? = null
 
@@ -150,12 +153,9 @@ class LineChartView @JvmOverloads constructor(
             return
         }
 
-        calculateGrid(chartBounds) { positionY, viewportY ->
-            gridPath.moveTo(0F, viewportY)
-            gridPath.lineTo(width.toFloat(), viewportY)
-
+        for ((positionY, viewportY) in gridLineCoordinates) {
             canvas?.drawText(
-                positionY.toString(),
+                positionY,
                 paddingLeft + GRID_TEXT_PADDING,
                 viewportY - GRID_TEXT_PADDING,
                 gridTextPaint
@@ -211,6 +211,13 @@ class LineChartView @JvmOverloads constructor(
         fillPath.lineTo(lastPoint.first, height.toFloat())
         fillPath.lineTo( firstPoint.first, height.toFloat())
         fillPath.lineTo(firstPoint.first, firstPoint.second)
+
+        calculateGrid(chartBounds) { positionY, viewportY ->
+            gridPath.moveTo(0F, viewportY)
+            gridPath.lineTo(width.toFloat(), viewportY)
+
+            gridLineCoordinates.add(Pair(positionY.toString(), viewportY))
+        }
     }
 
     private fun clearState() {
@@ -219,6 +226,7 @@ class LineChartView @JvmOverloads constructor(
         gridPath.reset()
         fillPath.reset()
         strokePath.reset()
+        gridLineCoordinates.clear()
         lineChartProcessor.clear()
     }
 
