@@ -17,7 +17,7 @@ Bit coin market rate chart
 - Dagger
 - Retrofit
 
-Used currencies api is [Blockchain](https://www.blockchain.com/api/charts_api).
+Used api is [Blockchain](https://www.blockchain.com/api/charts_api).
 
 ### Screenshot
 
@@ -27,9 +27,9 @@ Used currencies api is [Blockchain](https://www.blockchain.com/api/charts_api).
 
 ### Download
 
-Latest release version: **0.9**
+Latest release version: **1.0**
 
-You can download the latest release from the [release page](https://github.com/st235/BitObserver/releases) or by [direct link](https://github.com/st235/BitObserver/releases/tag/0.9).
+You can download the latest release from the [release page](https://github.com/st235/BitObserver/releases) or by [direct link](https://github.com/st235/BitObserver/releases/tag/1.0).
 
 ### License
 

@@ -4,8 +4,8 @@ ext.config = [
         minSdk: 15,
         targetSdk: 29,
         compileSdk: 29,
-        versionCode: 12,
-        versionName: "0.9"
+        versionCode: 16,
+        versionName: "1.0"
 ]
 
 ext.versions = [
